@@ -7,6 +7,30 @@ function appError(message, status = 400, extra = {}) {
   return error;
 }
 
+function toNumber(value) {
+  return Number(value || 0);
+}
+
+function mapFlatCounts(flat) {
+  return {
+    ...flat,
+    room_count: toNumber(flat.room_count),
+    bed_count: toNumber(flat.bed_count),
+    occupied_beds: toNumber(flat.occupied_beds),
+  };
+}
+
+function mapRoomCounts(room) {
+  return {
+    ...room,
+    current_bed_count: toNumber(room.current_bed_count),
+    occupied_bed_count: toNumber(room.occupied_bed_count),
+    max_bed_capacity: toNumber(room.max_bed_capacity),
+    total_beds: toNumber(room.total_beds),
+    occupied_beds: toNumber(room.occupied_beds),
+  };
+}
+
 async function getFlatById(client, flatId) {
   const result = await client.query("SELECT * FROM flats WHERE id = $1", [flatId]);
   return result.rows[0];
@@ -69,7 +93,7 @@ async function listFlats() {
     ORDER BY f.id DESC
   `);
 
-  return result.rows;
+  return result.rows.map(mapFlatCounts);
 }
 
 async function createFlat(data) {
@@ -129,7 +153,7 @@ async function listRooms() {
     ORDER BY r.id DESC
   `);
 
-  return result.rows;
+  return result.rows.map(mapRoomCounts);
 }
 
 async function createRoom(data) {
@@ -411,8 +435,12 @@ async function getOccupancy() {
   `);
 
   return {
-    flats: flatsResult.rows,
-    rooms: roomsResult.rows,
+    flats: flatsResult.rows.map((flat) => ({
+      ...flat,
+      total_beds: toNumber(flat.total_beds),
+      occupied_beds: toNumber(flat.occupied_beds),
+    })),
+    rooms: roomsResult.rows.map(mapRoomCounts),
   };
 }
 

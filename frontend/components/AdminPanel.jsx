@@ -62,6 +62,23 @@ export default function AdminPanel() {
     loadData();
   }, []);
 
+  useEffect(() => {
+    setRoomForm((current) => {
+      const hasFlat = data.flats.some((flat) => String(flat.id) === String(current.flat_id));
+      return hasFlat ? current : { ...current, flat_id: "" };
+    });
+
+    setBedForm((current) => {
+      const hasRoom = data.rooms.some((room) => String(room.id) === String(current.room_id));
+      return hasRoom ? current : { ...current, room_id: "" };
+    });
+
+    setTenantForm((current) => {
+      const hasBed = data.beds.some((bed) => String(bed.id) === String(current.bed_id));
+      return hasBed ? current : { ...current, bed_id: "" };
+    });
+  }, [data.flats, data.rooms, data.beds]);
+
   async function handleAction(action, successMessage) {
     try {
       setError("");
@@ -141,6 +158,9 @@ export default function AdminPanel() {
   }
 
   const availableBeds = data.beds.filter((bed) => bed.status === "available");
+  const totalBeds = data.beds.length;
+  const occupiedBeds = data.beds.filter((bed) => bed.status === "occupied").length;
+  const maintenanceBeds = data.beds.filter((bed) => bed.status === "under_maintenance").length;
 
   return (
     <main className="page-shell">
@@ -154,6 +174,27 @@ export default function AdminPanel() {
 
       {error ? <p className="message error">{error}</p> : null}
       {notice ? <p className="message success">{notice}</p> : null}
+
+      <section className="grid four-up summary-grid">
+        <div className="stat-card">
+          <span>Total Flats</span>
+          <strong>{data.flats.length}</strong>
+        </div>
+        <div className="stat-card">
+          <span>Total Rooms</span>
+          <strong>{data.rooms.length}</strong>
+        </div>
+        <div className="stat-card">
+          <span>Occupied Beds</span>
+          <strong>
+            {occupiedBeds} / {totalBeds}
+          </strong>
+        </div>
+        <div className="stat-card">
+          <span>Maintenance Beds</span>
+          <strong>{maintenanceBeds}</strong>
+        </div>
+      </section>
 
       <section className="grid two-up">
         <div className="card">
@@ -203,6 +244,7 @@ export default function AdminPanel() {
             />
             <button type="submit">Add Room</button>
           </form>
+          {!data.flats.length ? <p className="helper-text">Create a flat first to add a room.</p> : null}
         </div>
       </section>
 
@@ -235,6 +277,7 @@ export default function AdminPanel() {
             </select>
             <button type="submit">Add Bed</button>
           </form>
+          {!data.rooms.length ? <p className="helper-text">Create a room first to add a bed.</p> : null}
         </div>
 
         <div className="card">
@@ -279,6 +322,7 @@ export default function AdminPanel() {
           <div>
             <h3>By Flat</h3>
             <div className="list-stack">
+              {!data.occupancy.flats.length ? <p className="empty-state">No occupancy data yet.</p> : null}
               {data.occupancy.flats.map((flat) => (
                 <div key={flat.id} className="list-row">
                   <div>
@@ -295,6 +339,7 @@ export default function AdminPanel() {
           <div>
             <h3>By Room</h3>
             <div className="list-stack">
+              {!data.occupancy.rooms.length ? <p className="empty-state">No room occupancy data yet.</p> : null}
               {data.occupancy.rooms.map((room) => (
                 <div key={room.id} className="list-row">
                   <div>
@@ -316,6 +361,7 @@ export default function AdminPanel() {
       <section className="card">
         <h2>Flats</h2>
         <div className="list-stack">
+          {!data.flats.length ? <p className="empty-state">No flats added yet.</p> : null}
           {data.flats.map((flat) => (
             <div key={flat.id} className="list-row">
               <div>
@@ -336,6 +382,7 @@ export default function AdminPanel() {
       <section className="card">
         <h2>Rooms</h2>
         <div className="list-stack">
+          {!data.rooms.length ? <p className="empty-state">No rooms added yet.</p> : null}
           {data.rooms.map((room) => (
             <div key={room.id} className="list-row">
               <div>
@@ -361,6 +408,7 @@ export default function AdminPanel() {
       <section className="card">
         <h2>Beds</h2>
         <div className="list-stack">
+          {!data.beds.length ? <p className="empty-state">No beds added yet.</p> : null}
           {data.beds.map((bed) => (
             <div key={bed.id} className="list-row">
               <div>
@@ -401,6 +449,7 @@ export default function AdminPanel() {
       <section className="card">
         <h2>Tenants</h2>
         <div className="list-stack">
+          {!data.tenants.length ? <p className="empty-state">No tenants added yet.</p> : null}
           {data.tenants.map((tenant) => (
             <div key={tenant.id} className="list-row tenant-row">
               <div>

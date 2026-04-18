@@ -111,6 +111,10 @@ select {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.four-up {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .card {
   border: 1px solid rgba(255, 255, 255, 0.4);
   background: var(--panel);
@@ -131,6 +135,28 @@ select {
 .action-row {
   display: grid;
   gap: 0.75rem;
+}
+
+.summary-grid {
+  margin-bottom: 1rem;
+}
+
+.stat-card {
+  padding: 1rem 1.2rem;
+  border-radius: 22px;
+  background: rgba(255, 252, 246, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 12px 32px rgba(31, 42, 36, 0.08);
+}
+
+.stat-card span {
+  display: block;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+
+.stat-card strong {
+  font-size: 1.5rem;
 }
 
 .list-row {
@@ -179,13 +205,29 @@ select {
   font-weight: 700;
 }
 
+.empty-state,
+.helper-text {
+  color: var(--muted);
+  margin: 0;
+}
+
 @media (max-width: 860px) {
   .two-up {
     grid-template-columns: 1fr;
   }
 
+  .four-up {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .list-row,
   .action-row {
     display: grid;
+  }
+}
+
+@media (max-width: 560px) {
+  .four-up {
+    grid-template-columns: 1fr;
   }
 }
