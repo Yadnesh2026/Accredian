@@ -165,7 +165,6 @@ export default function AdminPanel() {
   return (
     <main className="page-shell">
       <section className="hero">
-        <p className="eyebrow">Intern Assignment Demo</p>
         <h1>Property Management Admin Panel</h1>
         <p className="hero-copy">
           Manage the full hierarchy from flats to tenant assignments with backend-enforced business rules.
