@@ -1,5 +1,5 @@
-import AdminPanel from "../components/AdminPanel";
+import EnterprisePage from "../components/enterprise/EnterprisePage";
 
 export default function HomePage() {
-  return <AdminPanel />;
+  return <EnterprisePage />;
 }
