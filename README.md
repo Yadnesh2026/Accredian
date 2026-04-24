@@ -85,5 +85,4 @@ If given more time, the following improvements would be implemented:
 * CSS / Tailwind (if used)
 
 
-Special thanks to AI tools like **ChatGPT, Claude, and GitHub Copilot** for assisting throughout the development process.
 
